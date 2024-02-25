@@ -14,6 +14,7 @@
     for (let i = 0; i < 10; i++) {
       document.getElementById("test").innerHTML += `This is line ${i + 1} <br>`;
     }
+    const () => console.log("Hello");
   </script>
 </body>
 
