@@ -15,11 +15,11 @@ class Database
     }
     public function createDb()
     {
-        $this->conn->createDb();
+        return $this->conn->createDb();
     }
     public function createUser(string $username, string $password, string $email)
     {
-        $this->conn->createUser($username, $password, $email);
+        return $this->conn->createUser($username, $password, $email);
     }
     public function getUser(string $username)
     {
@@ -27,7 +27,11 @@ class Database
     }
     public function updateUser(string $key, string $newValue, string $username)
     {
-        $this->conn->updateUser($key, $newValue, $username);
+        return $this->conn->updateUser($key, $newValue, $username);
+    }
+    public function loginUser(string $username, string $password)
+    {
+        return $this->conn->loginUser($username, $password);
     }
 
 }

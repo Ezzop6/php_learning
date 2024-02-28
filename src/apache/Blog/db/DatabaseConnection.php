@@ -54,40 +54,66 @@ class DatabaseConnection
     public function createUser(string $username, string $pwd, string $email)
     {
         $this->connect();
-        $sql = "INSERT INTO users (username, pwd, email) VALUES ('$username', '$pwd', '$email')";
-        $this->conn->query(Constant::DB);
-        $result = $this->conn->query($sql);
-        if ($result === true) {
-            echo "New record created successfully";
-        } else {
-            echo "Error:" . $this->conn->error;
+        try {
+            $sql = "INSERT INTO users (username, pwd, email) VALUES ('$username', '$pwd', '$email')";
+            $this->conn->query(Constant::DB);
+            $result = $this->conn->query($sql);
+            if ($result === true) {
+                return "New record created successfully";
+            } else {
+                return $this->conn->error;
+            }
+        } finally {
+            $this->close();
         }
-        $this->close();
     }
     public function getUser(string $username)
     {
         $this->connect();
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $this->conn->query(Constant::DB);
-        $result = $this->conn->query($sql);
-        if ($result->num_rows > 0) {
-            var_dump($result->fetch_assoc());
-        } else {
-            echo "0 results";
+        try {
+            $sql = "SELECT * FROM users WHERE username = '$username'";
+            $this->conn->query(Constant::DB);
+            $result = $this->conn->query($sql);
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc();
+            } else {
+                return "0 results";
+            }
+        } finally {
+            $this->close();
         }
-        $this->close();
+
     }
     public function updateUser(string $key, string $newValue, string $username)
     {
         $this->connect();
-        $sql = "UPDATE users SET $key = '$newValue' WHERE username = '$username'";
-        $this->conn->query(Constant::DB);
-        $result = $this->conn->query($sql);
-        if ($result === true) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error:" . $this->conn->error;
+        try {
+            $sql = "UPDATE users SET $key = '$newValue' WHERE username = '$username'";
+            $this->conn->query(Constant::DB);
+            $result = $this->conn->query($sql);
+            if ($result === true) {
+                return "Record updated successfully";
+            } else {
+                return $this->conn->error;
+            }
+        } finally {
+            $this->close();
         }
-        $this->close();
+    }
+    public function loginUser(string $username, string $password)
+    {
+        $this->connect();
+        try {
+            $sql = "SELECT * FROM users WHERE username = '$username' AND pwd = '$password'";
+            $this->conn->query(Constant::DB);
+            $result = $this->conn->query($sql);
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc();
+            } else {
+                return false;
+            }
+        } finally {
+            $this->close();
+        }
     }
 }
